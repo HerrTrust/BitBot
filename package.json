@@ -1,0 +1,32 @@
+{
+  "name": "BitBot",
+  "version": "0.6.0",
+  "description": "Crypto-Currency Trading Bot",
+  "main": "app.js",
+  "dependencies": {
+    "async": "0.2.9",
+    "bignumber.js": "1.2.1",
+    "bitstamp": "0.1.5",
+    "mime": "1.2.11",
+    "moment": "2.4.0",
+    "mongojs": "0.13.0",
+    "pushover-notifications": "0.1.5",
+    "underscore": "1.5.2",
+    "ws": "0.4.31",
+    "kraken-api": "0.1.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5an1ty/BitBot.git"
+  },
+  "keywords": [
+    "Cryptocurrency",
+    "Trading",
+    "Bot"
+  ],
+  "author": "5an1ty",
+  "license": "MIT"
+}
