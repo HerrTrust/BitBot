@@ -36,10 +36,11 @@ config.mongoConnectionString = 'localhost/bitbot';
 
 //------------------------------downloaderSettings
 config.downloaderRefreshSeconds = 10;
+// Best to keep this default setting unless you know what you are doing
 //------------------------------downloaderSettings
 
 //------------------------------candleStickSizeSettings
-config.candleStickSizeMinutes = 120;
+config.candleStickSizeMinutes = 5;
 //------------------------------candleStickSizeSettings
 
 //------------------------------orderSettings

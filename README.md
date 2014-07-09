@@ -59,3 +59,8 @@ Execute the following command in the folder where you installed BitBot:
 If you would like to simulate trading on your collected data, execute:
 
 	node backtester.js
+
+# Profitability
+
+The provided trading algorithms are well known and documented on the internet (MADC, PPO). I do not guarantee you will make any profit when using this bot...
+For better results, consider writing your own algorithm and share it with the community in a pull request :-).
