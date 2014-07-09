@@ -64,3 +64,7 @@ If you would like to simulate trading on your collected data, execute:
 
 The provided trading algorithms are well known and documented on the internet (MADC, PPO). I do not guarantee you will make any profit when using this bot...
 For better results, consider writing your own algorithm and share it with the community in a pull request :-).
+
+# Discussion
+
+For discussion on this bot visit the bitcointalk [topic](https://bitcointalk.org/index.php?topic=683755.0)
