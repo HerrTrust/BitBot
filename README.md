@@ -51,6 +51,10 @@ Lastly make sure you enter the correct connection string for your MongoDB instan
 
 	config.mongoConnectionString = 'username:password@example.com/mydb';
 
+By default you will see a lot of debugging information, once you are sure that your bot is retrieving data change the debug setting to false:
+
+	config.debug = false;
+
 These are the minimum required settings you need to get the bot started.
 All other settings are user preference and should be pretty self explanatory.
 

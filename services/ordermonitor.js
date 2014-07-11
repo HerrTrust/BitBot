@@ -5,9 +5,9 @@ var api = require('./api.js');
 
 var ordermonitor = function() {
 
-    _.bindAll(this, 'checkCancellation', 'processCancellation', 'add', 'cancelAllOpen');
+    _.bindAll(this, 'checkCancellation', 'processCancellation', 'add', 'resolvePreviousOrder');
 
-    this.checkOrders = [];
+    this.checkOrder = {};
     
 };
 
@@ -28,13 +28,11 @@ ordermonitor.prototype.checkCancellation = function(checkOrder, filled) {
             clearInterval(checkOrder.interval);
             clearTimeout(checkOrder.timeout);
 
-            this.checkOrders = _.filter(this.checkOrders, function(entry){
-                return entry.id !== checkOrder.id;
-            });
-
             logger.log('Order (' + checkOrder.id + ') filled succesfully!');
 
             this.emit('filled', checkOrder);
+
+            this.checkOrder = {};
 
         }
 
@@ -62,51 +60,56 @@ ordermonitor.prototype.processCancellation = function(checkOrder, cancelled) {
 
     }
 
-    this.checkOrders = _.filter(this.checkOrders, function(entry){
-        return entry.id !== checkOrder.id;
-    });
+    this.checkOrder = {};
 
 };
 
 ordermonitor.prototype.add = function(orderDetails, cancelTime) {
 
-    this.cancelAllOpen();
+    this.resolvePreviousOrder();
 
-    var order = orderDetails.order;
+    this.checkOrder = {id:orderDetails.order, orderDetails:orderDetails, status:'open'};
 
-    logger.log('Monitoring order: ' + order + ' (Cancellation after ' + cancelTime + ' minutes)');
+    logger.log('Monitoring order: ' + this.checkOrder.id + ' (Cancellation after ' + cancelTime + ' minutes)');
 
-    var checkOrdersPos = this.checkOrders.length;
+    this.checkOrder.interval = setInterval(function() {
 
-    var interval = setInterval(function() {
-        api.orderFilled(this.checkOrders[checkOrdersPos].id, function(err, response){
-            this.checkCancellation(this.checkOrders[checkOrdersPos], response);
+        api.orderFilled(this.checkOrder.id, function(err, response){
+            this.checkCancellation(this.checkOrder, response);
         }.bind(this));
+
     }.bind(this), 1000 * 30);
 
-    var timeout = setTimeout(function() {
-        clearInterval(interval);
-        api.cancelOrder(this.checkOrders[checkOrdersPos].id, function(err, response) {
-            this.processCancellation(this.checkOrders[checkOrdersPos], response);
-        }.bind(this));
-    }.bind(this), 1000 * 60 * cancelTime);
+    this.checkOrder.timeout = setTimeout(function() {
 
-    this.checkOrders.push({id:order, orderDetails:orderDetails, status:'open', interval:interval, timeout:timeout});
+        clearInterval(this.checkOrder.interval);
+
+        if(this.checkOrder.status === 'open') {
+
+            api.cancelOrder(this.checkOrder.id, function(err, response) {
+                this.processCancellation(this.checkOrder, response);
+            }.bind(this));
+
+        }
+
+    }.bind(this), 1000 * 60 * cancelTime);
 
 };
 
-ordermonitor.prototype.cancelAllOpen = function() {
+ordermonitor.prototype.resolvePreviousOrder = function() {
 
-    this.checkOrders.forEach(function(checkOrder) {
+    if(this.checkOrder.status === 'open') {
 
-        api.cancelOrder(checkOrder.id, function(err, response) {});
-        clearInterval(checkOrder.interval);
-        clearTimeout(checkOrder.timeout);
-        this.checkOrders = _.filter(this.checkOrders, function(entry){
-            return entry.id !== checkOrder.id;
-        });
+        clearInterval(this.checkOrder.interval);
+        clearTimeout(this.checkOrder.timeout);
 
-    });
+        this.checkOrder = {};
+
+    } else {
+
+        this.checkOrder = {};
+
+    }
 
 };
 

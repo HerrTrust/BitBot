@@ -127,9 +127,17 @@ tradingagent.prototype.placeRealOrder = function() {
 
 tradingagent.prototype.placeSimulatedOrder = function() {
 
-	logger.log('Placed simulated ' + this.orderDetails.orderType + ' order: (' + this.orderDetails.amount + '@' + this.orderDetails.price + ')');
+	if(this.orderDetails.amount <= 0) {
 
-	this.emit('simulatedOrder', this.orderDetails);
+		logger.log('Insufficient funds to place an order.')
+
+	} else {
+
+		logger.log('Placed simulated ' + this.orderDetails.orderType + ' order: (' + this.orderDetails.amount + '@' + this.orderDetails.price + ')');
+
+		this.emit('simulatedOrder', this.orderDetails);
+
+	}
 
 };
 
