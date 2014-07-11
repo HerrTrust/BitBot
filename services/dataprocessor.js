@@ -179,7 +179,7 @@ dataprocessor.prototype.processUpdate = function(err, result) {
 
     if(err) {
 
-        logger.log('Couldn\'t create candlesticks due to a database error');
+        logger.error('Couldn\'t create candlesticks due to a database error');
         logger.error(err.stack);
 
         process.exit();

@@ -29,8 +29,8 @@ aggregator.prototype.update = function() {
 
 		if(this.latestCandlePeriod > this.previousCandlePeriod) {
 
-			logger.debug('Created a new ' + this.candleStickSize + ' minute candlestick!');
-			logger.debug(JSON.stringify(cs));
+			logger.log('Created a new ' + this.candleStickSize + ' minute candlestick!');
+			logger.log(JSON.stringify(cs));
 
 			this.emit('update', cs);
 
