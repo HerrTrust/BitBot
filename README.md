@@ -43,6 +43,10 @@ Then fill in your API details:
 		kraken: {apiKey: '', secret: ''}
 	};
 
+Lastly make sure you enter the correct connection string for your MongoDB instance:
+
+	config.mongoConnectionString = 'username:password@example.com/mydb';
+
 These are the minimum required settings you need to get the bot started.
 All other settings are user preference and should be pretty self explanatory.
 
@@ -67,4 +71,4 @@ For better results, consider writing your own algorithm and share it with the co
 
 # Discussion
 
-For discussion on this bot visit the bitcointalk [topic](https://bitcointalk.org/index.php?topic=683755.0)
+For discussion on this bot visit the bitcointalk [topic](https://bitcointalk.org/index.php?topic=683755.0).
