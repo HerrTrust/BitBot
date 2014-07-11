@@ -20,6 +20,10 @@ Pay close attention to the log messages of NPM (there shouldn't be any errors).
 
 # Configuration basics
 
+Copy the config.sample.js file and name it config.js.
+
+Fill in the config.js file with relevant information.
+
 When running the bot initially make sure to run with real trading disabled:
 
 	config.tradingEnabled = false;
@@ -51,10 +55,6 @@ These are the minimum required settings you need to get the bot started.
 All other settings are user preference and should be pretty self explanatory.
 
 # Usage
-
-Copy the config.sample.js file and name it config.js.
-
-Fill in the config.js file with relevant information.
 
 Execute the following command in the folder where you installed BitBot:
 
