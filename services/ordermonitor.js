@@ -87,7 +87,9 @@ ordermonitor.prototype.add = function(orderDetails, cancelTime) {
         this.checkOrder.interval = setInterval(function() {
 
             api.orderFilled(this.checkOrder.id, function(err, response){
-                this.checkCancellation(this.checkOrder, response);
+                if(!err) {
+                    this.checkCancellation(this.checkOrder, response);
+                }
             }.bind(this));
 
         }.bind(this), 1000 * 10);

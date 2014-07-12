@@ -83,6 +83,7 @@ api.prototype.errorHandler = function(method, receivedArgs, retryAllowed, cb) {
 
                 logger.error('Couldn\'t connect to the API.');
                 return logger.error(JSON.stringify(err).substring(0,99));
+                cb(err, result);
 
             }
 

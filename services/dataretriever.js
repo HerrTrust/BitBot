@@ -19,7 +19,11 @@ Util.inherits(downloader, EventEmitter);
 
 downloader.prototype.processTrades = function(err, trades) {
 
-    this.emit('update', trades);
+    if(!err) {
+
+        this.emit('update', trades);
+
+    }
 
 };
 
