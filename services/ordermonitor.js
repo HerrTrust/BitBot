@@ -5,7 +5,7 @@ var api = require('./api.js');
 
 var ordermonitor = function() {
 
-    _.bindAll(this, 'checkCancellation', 'processCancellation', 'add', 'resolvePreviousOrder');
+    _.bindAll(this, 'checkCancellation', 'processCancellation', 'processSimulation', 'add', 'resolvePreviousOrder');
 
     this.checkOrder = {};
     
@@ -31,8 +31,6 @@ ordermonitor.prototype.checkCancellation = function(checkOrder, filled) {
             logger.log('Order (' + checkOrder.id + ') filled succesfully!');
 
             this.emit('filled', checkOrder);
-
-            this.checkOrder = {};
 
         }
 
@@ -60,7 +58,15 @@ ordermonitor.prototype.processCancellation = function(checkOrder, cancelled) {
 
     }
 
-    this.checkOrder = {};
+};
+
+ordermonitor.prototype.processSimulation = function(checkOrder) {
+
+    logger.log('Order (' + checkOrder.id + ') filled succesfully!');
+
+    checkOrder.status = 'filled';
+
+    this.emit('filled', checkOrder);
 
 };
 
@@ -72,27 +78,35 @@ ordermonitor.prototype.add = function(orderDetails, cancelTime) {
 
     logger.log('Monitoring order: ' + this.checkOrder.id + ' (Cancellation after ' + cancelTime + ' minutes)');
 
-    this.checkOrder.interval = setInterval(function() {
+    if(this.checkOrder.id === 'Simulated') {
 
-        api.orderFilled(this.checkOrder.id, function(err, response){
-            this.checkCancellation(this.checkOrder, response);
-        }.bind(this));
+        this.processSimulation(this.checkOrder);
 
-    }.bind(this), 1000 * 30);
+    } else {
 
-    this.checkOrder.timeout = setTimeout(function() {
+        this.checkOrder.interval = setInterval(function() {
 
-        clearInterval(this.checkOrder.interval);
-
-        if(this.checkOrder.status === 'open') {
-
-            api.cancelOrder(this.checkOrder.id, function(err, response) {
-                this.processCancellation(this.checkOrder, response);
+            api.orderFilled(this.checkOrder.id, function(err, response){
+                this.checkCancellation(this.checkOrder, response);
             }.bind(this));
 
-        }
+        }.bind(this), 1000 * 30);
 
-    }.bind(this), 1000 * 60 * cancelTime);
+        this.checkOrder.timeout = setTimeout(function() {
+
+            clearInterval(this.checkOrder.interval);
+
+            if(this.checkOrder.status === 'open') {
+
+                api.cancelOrder(this.checkOrder.id, function(err, response) {
+                    this.processCancellation(this.checkOrder, response);
+                }.bind(this));
+
+            }
+
+        }.bind(this), 1000 * 60 * cancelTime);
+
+    }
 
 };
 
@@ -103,11 +117,7 @@ ordermonitor.prototype.resolvePreviousOrder = function() {
         clearInterval(this.checkOrder.interval);
         clearTimeout(this.checkOrder.timeout);
 
-        this.checkOrder = {};
-
-    } else {
-
-        this.checkOrder = {};
+        this.checkOrder.status = 'cancelled';
 
     }
 
