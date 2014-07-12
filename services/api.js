@@ -367,7 +367,7 @@ api.prototype.orderFilled = function(order, cb) {
 
             };
 
-            this.bitstamp.open_orders(this.errorHandler(this.orderFilled, args, true, handler));
+            this.bitstamp.open_orders(this.errorHandler(this.orderFilled, args, false, handler));
 
         } else if(this.exchange === 'kraken') {
 
@@ -391,7 +391,7 @@ api.prototype.orderFilled = function(order, cb) {
 
             };
 
-            this.kraken.api('OpenOrders', {}, this.errorHandler(this.orderFilled, args, true, handler));
+            this.kraken.api('OpenOrders', {}, this.errorHandler(this.orderFilled, args, false, handler));
 
         }
 

@@ -90,7 +90,7 @@ ordermonitor.prototype.add = function(orderDetails, cancelTime) {
                 this.checkCancellation(this.checkOrder, response);
             }.bind(this));
 
-        }.bind(this), 1000 * 30);
+        }.bind(this), 1000 * 10);
 
         this.checkOrder.timeout = setTimeout(function() {
 
